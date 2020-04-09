@@ -15,12 +15,12 @@ public class UserModel {
     @NotBlank(message = "姓名不能为空")
     private String name;
 
-    @NotNull(message = "姓名不能为空")
+    @NotNull(message = "性别不能为空")
     private Byte gender;
 
     @NotNull(message = "年龄不能为空")
-    @Min(value = 0,message = "年龄不能小于0")
-    @Max(value = 150,message = "年龄不能大于150")
+    @Min(value = 0, message = "年龄不能小于0")
+    @Max(value = 150, message = "年龄不能大于150")
     private Integer age;
 
     @NotBlank(message = "手机号不能为空")

@@ -1,7 +1,6 @@
 package com.miaoshaproject.valiator;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintViolation;
@@ -14,7 +13,7 @@ import java.util.Set;
  * @Date: 2019/4/4
  */
 @Component
-public class ValidatorImpl implements InitializingBean {
+public class  ValidatorImpl implements InitializingBean {
 
 
     private Validator validator;

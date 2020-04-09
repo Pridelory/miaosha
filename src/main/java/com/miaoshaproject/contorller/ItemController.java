@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/item")
 @CrossOrigin(origins = {"*"}, allowCredentials = "true")
 public class ItemController extends BaseController {
-    
+
     @Autowired
     ItemService itemService;
 
@@ -51,13 +51,10 @@ public class ItemController extends BaseController {
     }
 
 
-
-
-
     //商品详情页浏览
     @RequestMapping(value = "/get", method = {RequestMethod.GET})
     @ResponseBody
-    public CommonReturnType getItem(@RequestParam(name = "id")Integer id){
+    public CommonReturnType getItem(@RequestParam(name = "id") Integer id) {
         ItemModel itemModel = itemService.getItemById(id);
         ItemVo itemVo = this.convertVOFromModel(itemModel);
 
@@ -67,7 +64,7 @@ public class ItemController extends BaseController {
     //商品列表页浏览
     @RequestMapping(value = "/list", method = {RequestMethod.GET})
     @ResponseBody
-    public CommonReturnType listItem(){
+    public CommonReturnType listItem() {
 
         List<ItemModel> itemModelList = itemService.listItem();
         List<ItemVo> itemVoList = itemModelList.stream().map(itemModel -> {
@@ -78,14 +75,13 @@ public class ItemController extends BaseController {
     }
 
 
-
     private ItemVo convertVOFromModel(ItemModel itemModel) {
-        if(itemModel == null) {
+        if (itemModel == null) {
             return null;
         }
         ItemVo itemVo = new ItemVo();
-        BeanUtils.copyProperties(itemModel,itemVo);
-        if(itemModel.getPromoModel() != null){
+        BeanUtils.copyProperties(itemModel, itemVo);
+        if (itemModel.getPromoModel() != null) {
             //有正在进行或即将进行的秒杀活动
             itemVo.setPromoStatus(itemModel.getPromoModel().getStatus());
             itemVo.setPromoId(itemModel.getPromoModel().getId());

@@ -1,6 +1,8 @@
 package com.miaoshaproject.error;
 
-//包装器业务异常类实现
+/**
+ * 包装器业务异常类实现
+ */
 public class BussinessException extends Exception implements CommonError {
     //emun
     private CommonError commonError;

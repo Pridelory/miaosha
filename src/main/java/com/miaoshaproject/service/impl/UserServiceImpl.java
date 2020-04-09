@@ -1,6 +1,5 @@
 package com.miaoshaproject.service.impl;
 
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.miaoshaproject.dao.UserDOMapper;
 import com.miaoshaproject.dao.UserPasswordDOMapper;
 import com.miaoshaproject.dataobject.UserDO;
@@ -23,8 +22,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDOMapper userDOMapper;
+
     @Autowired
     private UserPasswordDOMapper userPasswordDOMapper;
+
     @Autowired
     private ValidatorImpl validator;
 
@@ -48,9 +49,9 @@ public class UserServiceImpl implements UserService {
         if (userModel == null) throw new BussinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
 
         ValidationResult result = validator.validate(userModel);
-        System.out.println(result.getErrMsg()+"result");
+        System.out.println(result.getErrMsg() + "result");
         if (result.isHasErrors()) {
-            throw new BussinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,result.getErrMsg());
+            throw new BussinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
         }
 
         //实现model->dataobject方法
@@ -59,7 +60,7 @@ public class UserServiceImpl implements UserService {
         try {
             userDOMapper.insertSelective(userDO);
         } catch (DuplicateKeyException e) {
-            throw new BussinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,"手机号已被注册！");
+            throw new BussinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "手机号已被注册！");
         }
         userModel.setId(userDO.getId());
 
@@ -71,20 +72,20 @@ public class UserServiceImpl implements UserService {
     public UserModel validateLogin(String telphone, String encrptPassword) throws BussinessException {
         //通过用户的手机获取用户信息
         UserDO userDO = userDOMapper.selectByTelphone(telphone);
-        if(userDO == null) {
+        if (userDO == null) {
             throw new BussinessException(EmBusinessError.USER_LOGIN_FAIL);
         }
         UserPasswordDO userPasswordDO = userPasswordDOMapper.selectByUserId(userDO.getId());
-        UserModel userModel = convertFromDataObject(userDO,userPasswordDO);
+        UserModel userModel = convertFromDataObject(userDO, userPasswordDO);
         //拿到用户信息内加密的密码是否和传输的是否相匹配
-        if(!StringUtils.equals(encrptPassword,userModel.getEncrptPassword())){
+        if (!StringUtils.equals(encrptPassword, userModel.getEncrptPassword())) {
             throw new BussinessException(EmBusinessError.USER_LOGIN_FAIL);
         }
         return userModel;
     }
 
-    private UserPasswordDO convertPasswordFromModel(UserModel userModel){
-        if(userModel == null) {
+    private UserPasswordDO convertPasswordFromModel(UserModel userModel) {
+        if (userModel == null) {
             return null;
         }
         UserPasswordDO userPasswordDO = new UserPasswordDO();
@@ -92,12 +93,13 @@ public class UserServiceImpl implements UserService {
         userPasswordDO.setUserId(userModel.getId());
         return userPasswordDO;
     }
-    private UserDO convertFromModel(UserModel userModel){
-        if(userModel == null) {
+
+    private UserDO convertFromModel(UserModel userModel) {
+        if (userModel == null) {
             return null;
         }
         UserDO userDO = new UserDO();
-        BeanUtils.copyProperties(userModel,userDO);
+        BeanUtils.copyProperties(userModel, userDO);
         return userDO;
     }
 

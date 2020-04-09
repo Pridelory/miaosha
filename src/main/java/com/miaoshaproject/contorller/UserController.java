@@ -7,12 +7,10 @@ import com.miaoshaproject.error.EmBusinessError;
 import com.miaoshaproject.response.CommonReturnType;
 import com.miaoshaproject.service.UserService;
 import com.miaoshaproject.service.model.UserModel;
-import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import sun.awt.EmbeddedFrame;
 import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +25,6 @@ import java.util.Random;
 //@CrossOrigin(allowCredentials = "true",allowedHeaders = "*")
 public class UserController extends BaseController {
 
-
     @Autowired
     private UserService userService;
 
@@ -39,19 +36,19 @@ public class UserController extends BaseController {
     //用户登陆接口
     @RequestMapping(value = "/login", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
-    public CommonReturnType login(@RequestParam(name="telphone")String telphong,
-                                  @RequestParam(name="password")String password) throws BussinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
+    public CommonReturnType login(@RequestParam(name = "telphone") String telphong,
+                                  @RequestParam(name = "password") String password) throws BussinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
         //参数校验
-        if(org.apache.commons.lang3.StringUtils.isEmpty(telphong)|| org.apache.commons.lang3.StringUtils.isEmpty(password)){
+        if (org.apache.commons.lang3.StringUtils.isEmpty(telphong) || org.apache.commons.lang3.StringUtils.isEmpty(password)) {
             throw new BussinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
         }
         //用户登陆服务，用来校验用户登陆是否合法
-        UserModel userModel =userService.validateLogin(telphong,this.enCodeByMD5(password));
+        UserModel userModel = userService.validateLogin(telphong, this.enCodeByMD5(password));
 
         //将登陆凭证加入到用户登陆成功的session中
         UserVo userVo = convertFromMode(userModel);
-        this.httpServletRequest.getSession().setAttribute("IS_LOGIN",true);
-        this.httpServletRequest.getSession().setAttribute("LOGIN_USER",userModel);
+        this.httpServletRequest.getSession().setAttribute("IS_LOGIN", true);
+        this.httpServletRequest.getSession().setAttribute("LOGIN_USER", userModel);
 
         System.out.println(this.httpServletRequest.getSession().getAttribute("IS_LOGIN"));
 
@@ -68,7 +65,7 @@ public class UserController extends BaseController {
                                      @RequestParam(name = "name") String name,
                                      @RequestParam(name = "gender") Integer gender,
                                      @RequestParam(name = "age") Integer age,
-                                     @RequestParam(name="password")String password) throws BussinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
+                                     @RequestParam(name = "password") String password) throws BussinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
         //验证手机号和对应otpcode相符
         String inSessionOtpCode = (String) this.httpServletRequest.getSession().getAttribute(telphone);
         if (!StringUtils.equals(otpCode, inSessionOtpCode)) {
